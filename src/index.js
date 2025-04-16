@@ -12,16 +12,16 @@ root.render(
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const PORT = process.env.PORT || 3001;
+const path = require('path');
 
 app.use(cors());
 
 const questions = require("./questions.json"); // Make sure this path is correct
-
-app.get("/questions", (req, res) => {
-  res.json(questions);
+app.get('/questions', (req, res) => {
+  res.sendFile(path.join(__dirname, 'questions.json'));
 });
 
-app.listen(PORT, "0.0.0.0", () => {
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
