@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const Game = () => {
+const GamePage = () => {
   const [questions, setQuestions] = useState([]);
   const [difficulty, setDifficulty] = useState("easy"); // Difficulty state
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -13,11 +13,22 @@ const Game = () => {
   // Fetch questions from the backend when component mounts
   useEffect(() => {
     fetch("https://sentence-builder-game-2.onrender.com/questions")
-      .then((response) => response.json())
-      .then((data) => setQuestions(data))
-      .catch((error) => console.error("Error fetching questions:", error));
+    const fetchQuestions = async () => {
+      try {
+        const response = await axios.get("https://sentence-builder-game-2.onrender.com/questions");
+        setQuestions(response.data);
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
+    fetchQuestions();
   }, []);
 
+  
+  if (questions.length === 0) {
+    return <div>Loading...</div>;
+  }
+  
   // Filter questions based on selected difficulty
   const filteredQuestions = questions.filter(
     (question) => question.difficulty === difficulty
@@ -151,4 +162,4 @@ const Game = () => {
   );
 };
 
-export default Game;
+export default GamePage;
