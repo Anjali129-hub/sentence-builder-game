@@ -1,11 +1,12 @@
+// src/api/fetchQuestions.js
 import axios from 'axios';
 
 export const fetchQuestions = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/questions');
+    const response = await axios.get('https://sentence-builder-game-2.onrender.com/questions');
     return response.data;
   } catch (error) {
     console.error('Error fetching questions:', error);
-    return []; // Return empty array in case of error
+    return [];
   }
 };
