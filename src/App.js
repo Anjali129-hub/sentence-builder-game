@@ -210,7 +210,7 @@ const App = () => {
           ))}
         </h2>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {currentQuestion?.options.map((option, index) => (
             <button
               key={index}
@@ -243,8 +243,6 @@ const App = () => {
 };
 
 export default App;
-
-
 
 
 
