@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .option-btn {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .option-btn:disabled {
+    background-color: #d3d3d3; /* Disabled */
+    cursor: not-allowed;
+  }
+  
+  .next-btn {
+    background-color: #008CBA; /* Blue */
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .next-btn:disabled {
+    background-color: #d3d3d3; /* Disabled */
+    cursor: not-allowed;
+  }
+  
