@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { questions } from "./db"; // Assuming you're importing your questions from db.json
+import { questions } from "./questions"; // Assuming you're importing your questions from db.json
 
 const GamePage = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);  // For current question
