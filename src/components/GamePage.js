@@ -1,22 +1,33 @@
-import React, { useState } from "react";
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
-const Game = ({ questions }) => {
+const Game = () => {
+  const [questions, setQuestions] = useState([]);
   const [difficulty, setDifficulty] = useState("easy"); // Difficulty state
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedWords, setSelectedWords] = useState([]);
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
   const [answers, setAnswers] = useState([]);
-  const [showFeedback, setShowFeedback] = useState(false);  // To show feedback after game ends
+  const [showFeedback, setShowFeedback] = useState(false); // To show feedback after game ends
+
+  // Fetch questions from the backend when component mounts
+  useEffect(() => {
+    fetch("https://sentence-builder-game-2.onrender.com/questions")
+      .then((response) => response.json())
+      .then((data) => setQuestions(data))
+      .catch((error) => console.error("Error fetching questions:", error));
+  }, []);
 
   // Filter questions based on selected difficulty
-  const filteredQuestions = questions.filter((question) => question.difficulty === difficulty);
+  const filteredQuestions = questions.filter(
+    (question) => question.difficulty === difficulty
+  );
   const currentQuestion = filteredQuestions[currentIndex] || questions[0]; // Fallback to first question
 
   // Difficulty change handler
   const handleDifficultyChange = (level) => {
     setDifficulty(level);
-    setCurrentIndex(0);  // Reset to first question when difficulty changes
+    setCurrentIndex(0); // Reset to first question when difficulty changes
   };
 
   if (!questions || questions.length === 0) {

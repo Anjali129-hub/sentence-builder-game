@@ -15,18 +15,17 @@ const App = () => {
 
   useEffect(() => {
     axios
-  .get("https://sentence-builder-game-2.onrender.com")  // <-- Replace this with your deployed backend URL
-  .then((response) => {
-    if (Array.isArray(response.data)) {
-      setQuestions(response.data);
-    } else {
-      console.error("Data is not an array:", response.data);
-    }
-  })
-  .catch((error) => {
-    console.error("Error fetching questions:", error);
-  });
-
+      .get("https://sentence-builder-game-2.onrender.com/questions")  // <-- Fetch from backend
+      .then((response) => {
+        if (Array.isArray(response.data)) {
+          setQuestions(response.data);
+        } else {
+          console.error("Data is not an array:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching questions:", error);
+      });
   }, []);
 
   useEffect(() => {
@@ -217,10 +216,8 @@ const App = () => {
               key={index}
               onClick={() => handleOptionClick(option)}
               className={`p-2 rounded-lg font-semibold ${
-                selectedWords.includes(option)
-                  ? "bg-green-500 text-white"
-                  : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`}
+                selectedWords.includes(option) ? "bg-blue-600 text-white" : "bg-gray-200"
+              } hover:bg-blue-500 transition`}
             >
               {option}
             </button>
@@ -228,22 +225,21 @@ const App = () => {
         </div>
       </div>
 
-      <div className="text-center mt-4">
-        <p className="text-xl mb-4">Time Left: {timeLeft}s</p>
-        {selectedWords.every((word) => word !== "") && (
-          <button
-            onClick={handleNextQuestion}
-            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
-          >
-            Next Question
-          </button>
-        )}
+      <div className="flex justify-between items-center">
+        <span>Time Left: {timeLeft}s</span>
+        <button
+          onClick={handleNextQuestion}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
 };
 
 export default App;
+
 
 
 
