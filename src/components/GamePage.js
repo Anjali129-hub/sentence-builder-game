@@ -9,16 +9,24 @@ const GamePage = () => {
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [showFeedback, setShowFeedback] = useState(false); // To show feedback after game ends
+  const [loading, setLoading] = useState(true);
 
   // Fetch questions from the backend when component mounts
   useEffect(() => {
-    fetch('https://sentence-builder-game-2.onrender.com/questions')
-    // Assuming questions.json is now in the public folder
+    fetch('/questions.json')  // Updated path to public folder
       .then(response => response.json())
       .then(data => setQuestions(data))
       .catch(error => console.error('Error loading questions:', error));
   }, []);
+  
+  
+  if (loading) {
+    return <p>Loading questions...</p>;
+  }
 
+  if (!questions || questions.length === 0) {
+    return <p>Game data is not available</p>;
+  }
 
   // Filter questions based on selected difficulty
   const filteredQuestions = questions.filter(
