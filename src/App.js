@@ -15,17 +15,18 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/questions")
-      .then((response) => {
-        if (Array.isArray(response.data)) {
-          setQuestions(response.data);
-        } else {
-          console.error("Data is not an array:", response.data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching questions:", error);
-      });
+  .get("https://your-backend-name.onrender.com/questions")  // <-- Replace this with your deployed backend URL
+  .then((response) => {
+    if (Array.isArray(response.data)) {
+      setQuestions(response.data);
+    } else {
+      console.error("Data is not an array:", response.data);
+    }
+  })
+  .catch((error) => {
+    console.error("Error fetching questions:", error);
+  });
+
   }, []);
 
   useEffect(() => {
