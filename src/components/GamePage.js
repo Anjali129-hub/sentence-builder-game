@@ -12,23 +12,13 @@ const GamePage = () => {
 
   // Fetch questions from the backend when component mounts
   useEffect(() => {
-    fetch("https://sentence-builder-game-2.onrender.com/questions")
-    const fetchQuestions = async () => {
-      try {
-        const response = await axios.get("https://sentence-builder-game-2.onrender.com/questions");
-        setQuestions(response.data);
-      } catch (error) {
-        console.error("Error fetching questions:", error);
-      }
-    };
-    fetchQuestions();
+    fetch('/questions.json')  // Assuming questions.json is now in the public folder
+      .then(response => response.json())
+      .then(data => setQuestions(data))
+      .catch(error => console.error('Error loading questions:', error));
   }, []);
 
-  
-  if (questions.length === 0) {
-    return <div>Loading...</div>;
-  }
-  
+
   // Filter questions based on selected difficulty
   const filteredQuestions = questions.filter(
     (question) => question.difficulty === difficulty
