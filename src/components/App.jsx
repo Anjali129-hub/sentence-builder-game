@@ -11,7 +11,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://sentence-builder-backend.onrender.com/questions") // <-- Update this line with your Render URL
+    fetch("https://sentence-builder-game-2.onrender.com") // <-- Update this line with your Render URL
       .then((res) => res.json())
       .then((data) => {
         setQuestions(data);

@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-  .get("https://sentence-builder-backend.onrender.com/questions")  // <-- Replace this with your deployed backend URL
+  .get("https://sentence-builder-game-2.onrender.com")  // <-- Replace this with your deployed backend URL
   .then((response) => {
     if (Array.isArray(response.data)) {
       setQuestions(response.data);
