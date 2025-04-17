@@ -15,14 +15,17 @@ const GamePage = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("https://sentence-builder-game-2.onrender.com/questions");
-        setQuestions(response.data);
+        const response = await fetch("https://sentence-builder-game-2.onrender.com/questions");
+        const data = await response.json();
+        setQuestions(data);
       } catch (error) {
         console.error("Error fetching questions:", error);
       }
     };
+  
     fetchQuestions();
   }, []);
+  
   
   
   
