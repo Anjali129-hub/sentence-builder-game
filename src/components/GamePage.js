@@ -25,6 +25,7 @@ const GamePage = () => {
   }, []);
   
   
+  
   if (loading) {
     return <p>Loading questions...</p>;
   }

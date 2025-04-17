@@ -10,8 +10,9 @@ function App() {
   const [showStartPage, setShowStartPage] = useState(true);
   const [loading, setLoading] = useState(true);
 
+  
   useEffect(() => {
-    fetch("https://sentence-builder-game-2.onrender.com") // <-- Update this line with your Render URL
+    fetch("https://sentence-builder-game-2.onrender.com/questions")
       .then((res) => res.json())
       .then((data) => {
         setQuestions(data);
@@ -22,6 +23,7 @@ function App() {
         setLoading(false);
       });
   }, []);
+  
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
