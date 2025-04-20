@@ -3,55 +3,48 @@ import { motion } from "framer-motion";
 
 const GamePage = () => {
   const [questions, setQuestions] = useState([]);
-  const [difficulty, setDifficulty] = useState("easy"); // Difficulty state
+  const [difficulty, setDifficulty] = useState("easy");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedWords, setSelectedWords] = useState([]);
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
   const [answers, setAnswers] = useState([]);
-  const [showFeedback, setShowFeedback] = useState(false); // To show feedback after game ends
+  const [showFeedback, setShowFeedback] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch questions from the backend when component mounts
+  // Fetch questions from backend
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch("https://sentence-builder-game-2.onrender.com/questions");
-        const data = await response.json();
+        const res = await fetch("https://sentence-builder-game-2.onrender.com/questions");
+        if (!res.ok) throw new Error("Failed to fetch questions.");
+        const data = await res.json();
         setQuestions(data);
-      } catch (error) {
-        console.error("Error fetching questions:", error);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load game questions.");
+        setLoading(false);
       }
     };
-  
+
     fetchQuestions();
   }, []);
-  
-  
-  
-  
-  if (loading) {
-    return <p>Loading questions...</p>;
-  }
 
-  if (!questions || questions.length === 0) {
-    return <p>Game data is not available</p>;
-  }
+  if (loading) return <p>Loading questions...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
-  // Filter questions based on selected difficulty
-  const filteredQuestions = questions.filter(
-    (question) => question.difficulty === difficulty
-  );
-  const currentQuestion = filteredQuestions[currentIndex] || questions[0]; // Fallback to first question
+  const filteredQuestions = questions.filter(q => q.difficulty === difficulty);
+  const currentQuestion = filteredQuestions[currentIndex];
 
-  // Difficulty change handler
   const handleDifficultyChange = (level) => {
     setDifficulty(level);
-    setCurrentIndex(0); // Reset to first question when difficulty changes
+    setCurrentIndex(0);
+    setSelectedWords([]);
+    setAnswerSubmitted(false);
+    setAnswers([]);
+    setShowFeedback(false);
   };
-
-  if (!questions || questions.length === 0) {
-    return <p>Game data is not available</p>;
-  }
 
   const handleWordClick = (word) => {
     if (!answerSubmitted && selectedWords.length < currentQuestion.correctAnswer.length) {
@@ -59,100 +52,120 @@ const GamePage = () => {
     }
   };
 
+  const handleWordUnselect = (word) => {
+    setSelectedWords(selectedWords.filter((w) => w !== word));
+  };
+
   const handleSubmit = () => {
-    const correct =
-      JSON.stringify(selectedWords) === JSON.stringify(currentQuestion.correctAnswer);
+    const correct = JSON.stringify(selectedWords) === JSON.stringify(currentQuestion.correctAnswer);
     const answerRecord = {
       questionId: currentQuestion.questionId,
+      question: currentQuestion.question,
       selected: selectedWords,
-      correct: correct,
+      correctAnswer: currentQuestion.correctAnswer,
+      correct,
     };
-
-    setAnswers((prev) => [...prev, answerRecord]);
+    setAnswers([...answers, answerRecord]);
     setAnswerSubmitted(true);
   };
 
   const handleNext = () => {
     if (currentIndex + 1 < filteredQuestions.length) {
-      setCurrentIndex((prev) => prev + 1);
+      setCurrentIndex(currentIndex + 1);
       setSelectedWords([]);
       setAnswerSubmitted(false);
     } else {
-      console.log("Game Over! Display feedback.");
-      setShowFeedback(true); // Show feedback after game ends
+      setShowFeedback(true);
     }
   };
 
   return (
-    <div>
-      {/* Difficulty Selection */}
-      <div className="mb-4">
-        <button onClick={() => handleDifficultyChange("easy")} className="mr-2 p-2 border bg-blue-500 text-white">Easy</button>
-        <button onClick={() => handleDifficultyChange("medium")} className="mr-2 p-2 border bg-yellow-500 text-white">Medium</button>
-        <button onClick={() => handleDifficultyChange("hard")} className="mr-2 p-2 border bg-red-500 text-white">Hard</button>
+    <div className="p-4">
+      {/* Difficulty selection */}
+      <div className="mb-4 flex gap-2">
+        {["easy", "medium", "hard"].map((level) => (
+          <button
+            key={level}
+            onClick={() => handleDifficultyChange(level)}
+            className={`px-4 py-2 rounded text-white capitalize ${
+              level === "easy" ? "bg-green-500" :
+              level === "medium" ? "bg-yellow-500" : "bg-red-500"
+            } ${difficulty === level ? "ring-2 ring-black" : ""}`}
+          >
+            {level}
+          </button>
+        ))}
       </div>
 
-      {/* Feedback Screen */}
       {showFeedback ? (
-        <div className="bg-white p-6 rounded shadow-md w-full max-w-2xl">
+        <div className="bg-white p-6 rounded shadow w-full max-w-2xl mx-auto">
           <h2 className="text-xl font-semibold mb-4">Game Over!</h2>
-          <p>Your score: {answers.filter((answer) => answer.correct).length} / {filteredQuestions.length}</p>
-          <div>
-            {answers.map((answer, idx) => (
-              <div key={idx}>
-                <p>Question {answer.questionId}: {answer.selected.join(" ")}</p>
-                <p>Correct answer: {currentQuestion.correctAnswer.join(" ")}</p>
-                <p>{answer.correct ? "Correct" : "Incorrect"}</p>
-              </div>
-            ))}
-          </div>
+          <p className="mb-4">
+            Your Score: {answers.filter((a) => a.correct).length} / {filteredQuestions.length}
+          </p>
+          {answers.map((ans, i) => (
+            <div key={i} className="mb-4 border-t pt-2">
+              <p className="font-medium">{ans.question}</p>
+              <p>
+                <span className="font-semibold">Your Answer:</span> {ans.selected.join(" ")}
+              </p>
+              <p>
+                <span className="font-semibold">Correct Answer:</span> {ans.correctAnswer.join(" ")}
+              </p>
+              <p className={ans.correct ? "text-green-600" : "text-red-600"}>
+                {ans.correct ? "Correct ✅" : "Incorrect ❌"}
+              </p>
+            </div>
+          ))}
         </div>
       ) : (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="bg-white p-6 rounded shadow-md w-full max-w-2xl"
+          className="bg-white p-6 rounded shadow w-full max-w-2xl mx-auto"
         >
-          <h2 className="text-xl font-semibold mb-4">
+          <h2 className="text-xl font-bold mb-2">
             Question {currentIndex + 1} of {filteredQuestions.length}
           </h2>
           <p className="mb-4">{currentQuestion.question}</p>
 
-          {/* Display selected words */}
-          <div className="mb-4">
+          {/* Selected Words */}
+          <div className="mb-4 flex flex-wrap gap-2">
             {selectedWords.map((word, idx) => (
               <span
                 key={idx}
-                onClick={() => setSelectedWords(selectedWords.filter((w) => w !== word))}
-                className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded mr-2 mb-2 cursor-pointer"
+                onClick={() => handleWordUnselect(word)}
+                className="bg-blue-100 text-blue-800 px-3 py-1 rounded cursor-pointer"
               >
                 {word}
               </span>
             ))}
           </div>
 
-          {/* Answer options */}
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            {currentQuestion.options.map((option, idx) => (
+          {/* Option Buttons */}
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            {currentQuestion.options.map((opt, idx) => (
               <button
                 key={idx}
-                onClick={() => handleWordClick(option)}
-                disabled={selectedWords.includes(option)}
-                className={`py-2 px-4 rounded border ${
-                  selectedWords.includes(option) ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300"
+                onClick={() => handleWordClick(opt)}
+                disabled={selectedWords.includes(opt)}
+                className={`py-2 px-4 rounded border transition ${
+                  selectedWords.includes(opt)
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
                 }`}
               >
-                {option}
+                {opt}
               </button>
             ))}
           </div>
 
-          {/* Submit/Next button */}
+          {/* Submit / Next */}
           {!answerSubmitted ? (
             <button
               onClick={handleSubmit}
-              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+              disabled={selectedWords.length !== currentQuestion.correctAnswer.length}
+              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50"
             >
               Submit Answer
             </button>
@@ -171,3 +184,4 @@ const GamePage = () => {
 };
 
 export default GamePage;
+

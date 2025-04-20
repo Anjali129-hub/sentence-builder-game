@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Game from "./components/Game";
+import GamePage from "./components/GamePage"; // ✅ Corrected import
 import FeedbackScreen from "./components/FeedbackScreen";
 import StartPage from "./components/StartPage";
 
@@ -10,7 +10,6 @@ function App() {
   const [showStartPage, setShowStartPage] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
     fetch("https://sentence-builder-game-2.onrender.com/questions")
       .then((res) => res.json())
@@ -23,7 +22,6 @@ function App() {
         setLoading(false);
       });
   }, []);
-  
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
@@ -32,7 +30,7 @@ function App() {
       ) : showStartPage ? (
         <StartPage onStart={() => setShowStartPage(false)} />
       ) : !showFeedback ? (
-        <Game
+        <GamePage
           questions={questions}
           setShowFeedback={setShowFeedback}
           setUserAnswers={setUserAnswers}

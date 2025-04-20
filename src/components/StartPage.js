@@ -1,11 +1,11 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const StartGame = () => {
-  const history = useHistory();
+  const navigate = useNavigate(); // ✅ useNavigate for React Router v6+
 
   const handleStart = () => {
-    history.push('/game');
+    navigate('/game'); // ✅ Navigate to the game page
   };
 
   return (

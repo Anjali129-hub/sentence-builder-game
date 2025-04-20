@@ -1,21 +1,31 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
+const fetch = require('node-fetch');  // To make requests to external APIs
+
 const app = express();
 
+// Enable CORS
 app.use(cors());
 
-// Load questions from db.json
-const rawData = fs.readFileSync('db.json');
-const db = JSON.parse(rawData);
+// Define route to fetch questions from an external API (you can replace this URL with your own)
+app.get('/questions', async (req, res) => {
+  try {
+    // Fetching questions from an external API
+    const response = await fetch('https://sentence-builder-game-2.onrender.com/questions');
+    const data = await response.json();
 
-// Define route
-app.get('/questions', (req, res) => {
-  res.json(db.questions); // assuming db.json has { "questions": [...] }
+    // Sending the fetched data as the response
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching questions:', error);
+    res.status(500).json({ error: 'Failed to fetch questions' });
+  }
 });
 
-const PORT = 3001;
+// Define the port
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
 
