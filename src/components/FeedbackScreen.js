@@ -18,10 +18,11 @@ const FeedbackScreen = ({ questions, userAnswers }) => {
           <div key={idx} className="mb-4 p-4 border rounded">
             <p className="font-semibold mb-2">{question.question}</p>
             <p className="mb-1">
-              <strong>Your Answer:</strong> {ans.selected.join(", ")}
+              <strong>Your Answer:</strong>{" "}
+              {ans.selected.length > 0 ? ans.selected.join(" ") : "No answer"}
             </p>
             <p className="mb-1">
-              <strong>Correct Answer:</strong> {question.correctAnswer.join(", ")}
+              <strong>Correct Answer:</strong> {question.correctAnswer.join(" ")}
             </p>
             <p>{ans.correct ? "✅ Correct" : "❌ Incorrect"}</p>
           </div>
@@ -30,7 +31,7 @@ const FeedbackScreen = ({ questions, userAnswers }) => {
 
       <button
         onClick={() => window.location.reload()}
-        className="mt-6 bg-blue-500 text-white py-2 px-4 rounded"
+        className="mt-6 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
       >
         Restart Game
       </button>
@@ -39,3 +40,4 @@ const FeedbackScreen = ({ questions, userAnswers }) => {
 };
 
 export default FeedbackScreen;
+

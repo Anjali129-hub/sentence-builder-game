@@ -1,4 +1,3 @@
-// src/api/fetchQuestions.js
 import axios from 'axios';
 
 export const fetchQuestions = async () => {

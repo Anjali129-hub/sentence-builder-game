@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import GamePage from "./components/GamePage"; // ✅ Corrected import
+import GamePage from "./components/GamePage"; 
 import FeedbackScreen from "./components/FeedbackScreen";
 import StartPage from "./components/StartPage";
 

@@ -12,7 +12,6 @@ const GamePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch questions from backend
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -20,16 +19,17 @@ const GamePage = () => {
         if (!res.ok) throw new Error("Failed to fetch questions.");
         const data = await res.json();
         setQuestions(data);
-        setLoading(false);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching questions:", err);
         setError("Failed to load game questions.");
-        setLoading(false);
+      } finally {
+        setLoading(false); // Always set loading to false
       }
     };
-
+  
     fetchQuestions();
   }, []);
+  
 
   if (loading) return <p>Loading questions...</p>;
   if (error) return <p className="text-red-500">{error}</p>;

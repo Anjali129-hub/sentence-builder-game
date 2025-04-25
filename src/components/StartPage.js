@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const StartGame = () => {
-  const navigate = useNavigate(); // ✅ useNavigate for React Router v6+
+  const navigate = useNavigate(); 
 
   const handleStart = () => {
-    navigate('/game'); // ✅ Navigate to the game page
+    navigate('/game'); 
   };
 
   return (

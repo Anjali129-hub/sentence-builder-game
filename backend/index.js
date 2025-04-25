@@ -1,20 +1,20 @@
 const express = require('express');
 const cors = require('cors');
-const fetch = require('node-fetch');  // To make requests to external APIs
+const fetch = require('node-fetch');  
 
 const app = express();
 
-// Enable CORS
+
 app.use(cors());
 
-// Define route to fetch questions from an external API (you can replace this URL with your own)
+
 app.get('/questions', async (req, res) => {
   try {
-    // Fetching questions from an external API
+    
     const response = await fetch('https://sentence-builder-game-2.onrender.com/questions');
     const data = await response.json();
 
-    // Sending the fetched data as the response
+    
     res.json(data);
   } catch (error) {
     console.error('Error fetching questions:', error);
