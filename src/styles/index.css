@@ -11,7 +11,7 @@ body {
   }
 
   .option-btn {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50; 
     color: white;
     padding: 10px;
     margin: 5px;
@@ -20,12 +20,12 @@ body {
   }
   
   .option-btn:disabled {
-    background-color: #d3d3d3; /* Disabled */
+    background-color: #d3d3d3; 
     cursor: not-allowed;
   }
   
   .next-btn {
-    background-color: #008CBA; /* Blue */
+    background-color: #008CBA; 
     color: white;
     padding: 10px;
     border-radius: 5px;
@@ -33,7 +33,7 @@ body {
   }
   
   .next-btn:disabled {
-    background-color: #d3d3d3; /* Disabled */
+    background-color: #d3d3d3; 
     cursor: not-allowed;
   }
   

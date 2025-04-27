@@ -23,7 +23,7 @@ const GamePage = () => {
         console.error("Error fetching questions:", err);
         setError("Failed to load game questions.");
       } finally {
-        setLoading(false); // Always set loading to false
+        setLoading(false); 
       }
     };
   

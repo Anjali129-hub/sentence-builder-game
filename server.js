@@ -4,7 +4,7 @@ const app = express();
 
 app.use(cors());
 
-// In-memory questions array (you pasted earlier)
+
 const questions = [
   {
     questionId: "1",
@@ -123,7 +123,7 @@ const questions = [
   },
 ];
 
-// Serve the questions
+
 app.get("/questions", (req, res) => {
   res.json(questions);
 });
